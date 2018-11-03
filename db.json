@@ -1,3 +1,22 @@
 {
-  "chores": []
+  "chores": [
+    {
+      "title": "feed milan ",
+      "priority": "20",
+      "duration": "10 mins",
+      "id": 1
+    },
+    {
+      "title": "feed juan",
+      "priority": "99",
+      "duration": "2 mins",
+      "id": 2
+    },
+    {
+      "title": "feed sarah",
+      "priority": "100",
+      "duration": "10",
+      "id": 7
+    }
+  ]
 }

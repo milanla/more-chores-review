@@ -10,7 +10,6 @@ fetch(mainUrl)
 })
 
 function renderChoreCard(choreList) {
-
   choreList.forEach(function(chore) {
     choreContainer.innerHTML += `<div class="chore-card">
   <button class="delete-button" data-id='${chore["id"]}'>x</button>
@@ -19,14 +18,10 @@ function renderChoreCard(choreList) {
   <input><!-- value should have the importance  -->
 </div>`
   })
-
 }
 
-// for posting a new chore card
-
-
-function createNewChoreCard(url) {
-  return fetch(url, {
+function createNewChoreCard(event) {
+  fetch(mainUrl, {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
@@ -38,43 +33,42 @@ function createNewChoreCard(url) {
       duration: document.getElementById("duration").value
     }) // whatever data we got
   })
-  .then(response => response.json()) // parses response to JSON!
+  event.target[0].value = ""
+  event.target[1].value = ""
+  event.target[2].value = ""
 }
+
+
 
 let formInput = document.getElementById('new-chore-form')
 formInput.addEventListener('submit', (event) => {
   event.preventDefault()
-  // console.log("hey")
-  createNewChoreCard("http://localhost:3000/chores")
-  .then(json => {
-    // debugger
-      choreContainer.innerHTML += `<div class="chore-card">
-    <button class="delete-button" data-id="${json["id"]}">x</button>
-    <h3> ${json["title"]} </h3>
-    <p> Duration: ${json["duration"]} </p>
-    <input><!-- value should have the importance  -->
+  let title = event.target[0]
+  let priority = event.target[1]
+  let duration = event.target[2]
+
+
+  choreContainer.innerHTML += `<div class="chore-card">
+  <button class="delete-button">x</button>
+  <h3> ${title.value} </h3>
+  <p> Duration: ${duration.value} </p>
+  <input>
   </div>`
-  })
-  document.getElementById("title").value = ""
-  document.getElementById("priority").value = ""
-  document.getElementById("duration").value = ""
-  })
 
-
-
+  createNewChoreCard(event)
+})
 
 // for deleting a chore card
 function deleteNewChoreCard(item, url) {
-  return fetch(url + '/' + item, {
-    method: "DELETE",
+  fetch(url + '/' + item, {
+    method: "DELETE"
   })
-  .then(response => response.json())
+  // .then(response => response.json()) we don't need it
 }
 
-// let deleteButton = document.querySelector('.delete-button')
 choreContainer.addEventListener('click', (event) => {
   if (event.target.tagName === 'BUTTON') {
-    debugger
+    // debugger
     event.target.parentElement.remove()
     deleteNewChoreCard(parseInt(event.target.dataset.id), "http://localhost:3000/chores")
   }
